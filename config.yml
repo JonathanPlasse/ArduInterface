@@ -1,0 +1,76 @@
+serial:
+    port: '/dev/ttyACM0'
+    baud: 115200
+data:
+    send:
+        -
+            label: 'Sample time'
+            type: 'uint32'
+            default: 1
+            min: 1
+            max: 1000
+        -
+            label: 'Kp'
+            type: 'float'
+            default: 1
+            min: 1
+            max: 1000
+        -
+            label: 'Ki'
+            type: 'float'
+            default: 1
+            min: 1
+            max: 1000
+        -
+            label: 'Kd'
+            type: 'float'
+            default: 1
+            min: 1
+            max: 1000
+        -
+            label: 'Setpoint'
+            type: 'float'
+            default: 1
+            min: 1
+            max: 1000
+        -
+            label: 'On/Off'
+            type: 'bool'
+            default: True
+        -
+            label: 'Anti Windup'
+            type: 'bool'
+            default: True
+    receive:
+        -
+            label: 'Input'
+            type: 'float'
+            subplot: 121
+        -
+            label: 'Setpoint'
+            type: 'float'
+            subplot: 121
+        -
+            label: 'Output'
+            type: 'float'
+            subplot: 222
+        -
+            label: 'Integral'
+            type: 'float'
+            subplot: 224
+plot:
+    -
+        pos: 121
+        title: 'Input / Reference'
+        min: -100
+        max: 1300
+    -
+        pos: 222
+        title: 'Output'
+        min: -280
+        max: 280
+    -
+        pos: 224
+        title: 'Integral'
+        min: -1000
+        max: 1000
