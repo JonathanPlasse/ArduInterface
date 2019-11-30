@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from matplotlib.pyplot import plt
+import matplotlib.pyplot as plt
 import collections
 
-class BeautifulPlot:
+class EasyPlot:
     def __init__(self):
-        fig = plt.figure()
+        self.fig = plt.figure()
 
         # Add subplots
         self.axes = {}
@@ -16,23 +16,23 @@ class BeautifulPlot:
 
         self.nb_point = 1000
 
-        # Declare queue
-        self.time = collections.deque([0]*nb_point, nb_point)
-        self.deques = {}
-
         # Declare plot data
         self.data = {}
 
     def add_subplot(self, pos, title, min, max):
-        self.axes[pos] = fig.add_subplot(pos)
+        self.axes[pos] = self.fig.add_subplot(pos)
         self.axes[pos].set_title(title)
-        self.axes[pos].legend()
         self.axes[pos].set_ylim(min, max)
 
     def add_plot(self, pos, label):
         self.plots[(pos, label)] = self.axes[pos].plot([], [], label=label)[0]
-        self.deques[(pos, label)] = collections.deque([0]*self.nb_point, self.nb_point)
-        self.data[(pos, label)] = [self.time, self.deques[(pos, label)]]
+        self.data[(pos, label)] = [collections.deque([0]*self.nb_point, self.nb_point),
+                                   collections.deque([0]*self.nb_point, self.nb_point)]
+        self.axes[pos].legend()
+        return self.data[(pos, label)]
+
+    def show(self):
+        plt.show()
 
     def update_figure(self):
         for key in self.plots:
@@ -42,4 +42,4 @@ class BeautifulPlot:
             self.axes[key].relim()
             self.axes[key].autoscale_view(True,True,False)
 
-        plt.show()
+        plt.draw()

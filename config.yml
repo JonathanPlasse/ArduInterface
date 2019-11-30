@@ -1,8 +1,42 @@
 serial:
     port: '/dev/ttyACM0'
     baud: 115200
+
+subplots:
+    -
+        pos: 121
+        title: 'Input / Reference'
+        min: -100
+        max: 1300
+    -
+        pos: 222
+        title: 'Output'
+        min: -280
+        max: 280
+    -
+        pos: 224
+        title: 'Integral'
+        min: -1000
+        max: 1000
 data:
-    send:
+    read:
+        -
+            label: 'Input'
+            type: 'float'
+            pos: 121
+        -
+            label: 'Setpoint'
+            type: 'float'
+            pos: 121
+        -
+            label: 'Output'
+            type: 'float'
+            pos: 222
+        -
+            label: 'Integral'
+            type: 'float'
+            pos: 224
+    write:
         -
             label: 'Sample time'
             type: 'uint32'
@@ -41,36 +75,3 @@ data:
             label: 'Anti Windup'
             type: 'bool'
             default: True
-    receive:
-        -
-            label: 'Input'
-            type: 'float'
-            subplot: 121
-        -
-            label: 'Setpoint'
-            type: 'float'
-            subplot: 121
-        -
-            label: 'Output'
-            type: 'float'
-            subplot: 222
-        -
-            label: 'Integral'
-            type: 'float'
-            subplot: 224
-plot:
-    -
-        pos: 121
-        title: 'Input / Reference'
-        min: -100
-        max: 1300
-    -
-        pos: 222
-        title: 'Output'
-        min: -280
-        max: 280
-    -
-        pos: 224
-        title: 'Integral'
-        min: -1000
-        max: 1000
