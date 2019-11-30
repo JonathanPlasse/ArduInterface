@@ -31,9 +31,6 @@ class EasyPlot:
         self.axes[pos].legend()
         return self.data[(pos, label)]
 
-    def show(self):
-        plt.show()
-
     def update_figure(self):
         for key in self.plots:
             self.plots[key].set_data(self.data[key])
@@ -41,5 +38,3 @@ class EasyPlot:
         for key in self.axes:
             self.axes[key].relim()
             self.axes[key].autoscale_view(True,True,False)
-
-        plt.draw()

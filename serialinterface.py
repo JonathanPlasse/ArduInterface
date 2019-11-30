@@ -10,7 +10,6 @@ class SerialInterface:
     def __init__(self):
         self.init_config()
         self.init_serial()
-        self.easyplot.show()
 
     def init_config(self):
         # Load configuration file
@@ -33,11 +32,10 @@ class SerialInterface:
         for plot in config['data']['read']:
             self.read_format.append(plot['type'])
             self.plot_data.append(self.easyplot.add_plot(plot['pos'], plot['label']))
-
         # Initialise for writing
         self.write_format = []
         for widget in config['data']['write']:
-            self.read_format.append(widget['type'])
+            self.write_format.append(widget['type'])
 
     def init_serial(self):
         self.bser = BinSerial(self.serial['port'], self.serial['baud'])
@@ -50,9 +48,9 @@ class SerialInterface:
         while (True):
             i += 1
             data = bser.read(read_format)
-            for j in range(read_format):
-                plot_data[0][j].append(i)
-                plot_data[1][j].append(data[j])
+            for j in range(len(read_format)):
+                plot_data[j][0].append(i)
+                plot_data[j][1].append(data[j])
 
             self.easyplot.update_figure()
 
