@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import sys
+from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout)
 import yaml
 import threading
 from binserial import BinSerial
 from easyplot import EasyPlot
 
-class SerialInterface:
+class SerialInterface(QWidget):
     def __init__(self):
+        super().__init__()
         self.init_config()
+        self.init_ui()
         self.init_serial()
 
     def init_config(self):
@@ -20,7 +24,7 @@ class SerialInterface:
         self.serial = config['serial']
 
         # Initialise EasyPlot
-        self.easyplot = EasyPlot()
+        self.easyplot = EasyPlot(self)
 
         # Initialise the subplots
         for subplot in config['subplots']:
@@ -32,10 +36,19 @@ class SerialInterface:
         for plot in config['data']['read']:
             self.read_format.append(plot['type'])
             self.plot_data.append(self.easyplot.add_plot(plot['pos'], plot['label']))
+
         # Initialise for writing
         self.write_format = []
         for widget in config['data']['write']:
             self.write_format.append(widget['type'])
+
+    def init_ui(self):
+        self.setWindowTitle('SerialInterface')
+
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(self.easyplot)
+
+        self.setLayout(main_layout)
 
     def init_serial(self):
         self.bser = BinSerial(self.serial['port'], self.serial['baud'])
@@ -52,8 +65,6 @@ class SerialInterface:
                 plot_data[j][0].append(i)
                 plot_data[j][1].append(data[j])
 
-            self.easyplot.update_figure()
-
     def write_serial(self):
         """run the step response and get the measures"""
         # Write some data to the arduino
@@ -61,4 +72,7 @@ class SerialInterface:
 
 
 if __name__ == '__main__':
-    SerialInterface()
+    app = QApplication(sys.argv)
+    serialinterface = SerialInterface()
+    serialinterface.show()
+    sys.exit(app.exec_())

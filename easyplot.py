@@ -1,12 +1,23 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Qt5Agg")
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5 import QtCore
 import collections
 
-class EasyPlot:
-    def __init__(self):
-        self.fig = plt.figure()
+class EasyPlot(FigureCanvas):
+    def __init__(self, parent=None):
+        self.fig = Figure()
+
+        super().__init__(self.fig)
+        self.setParent(parent)
+
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.update_figure)
+        timer.start(60)
 
         # Add subplots
         self.axes = {}
@@ -29,6 +40,7 @@ class EasyPlot:
         self.data[(pos, label)] = [collections.deque([0]*self.nb_point, self.nb_point),
                                    collections.deque([0]*self.nb_point, self.nb_point)]
         self.axes[pos].legend()
+
         return self.data[(pos, label)]
 
     def update_figure(self):
@@ -38,3 +50,5 @@ class EasyPlot:
         for key in self.axes:
             self.axes[key].relim()
             self.axes[key].autoscale_view(True,True,False)
+
+        self.draw()
